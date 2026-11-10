@@ -273,7 +273,12 @@ def _validate(headers: dict, key: str, subprotocols: Optional[List[str]]) -> tup
         result = result.encode("utf-8")
 
     value = f"{key}258EAFA5-E914-47DA-95CA-C5AB0DC85B11".encode("utf-8")
-    hashed = base64encode(hashlib.sha1(value).digest()).strip().lower()
+    try:
+        _sha1 = hashlib.sha1(value, usedforsecurity=False)
+    except TypeError:
+        # Python < 3.9 (some OpenWRT builds): openssl_sha1() has no usedforsecurity kwarg
+        _sha1 = hashlib.sha1(value)
+    hashed = base64encode(_sha1.digest()).strip().lower()
 
     if hmac.compare_digest(hashed, result):
         return True, subproto
