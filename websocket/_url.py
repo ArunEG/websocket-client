@@ -1,3 +1,4 @@
+from __future__ import annotations  # py3.7/3.8: builtin generics in type hints
 import ipaddress
 import os
 from typing import Optional, Union
@@ -107,9 +108,8 @@ def _is_address_in_network(ip: str, net: str) -> bool:
 
 def _is_no_proxy_host(hostname: str, no_proxy: Optional[list[str]]) -> bool:
     if not no_proxy:
-        if v := os.environ.get("no_proxy", os.environ.get("NO_PROXY", "")).replace(
-            " ", ""
-        ):
+        v = os.environ.get("no_proxy", os.environ.get("NO_PROXY", "")).replace(" ", "")
+        if v:
             no_proxy = v.split(",")
 
     # An entry that is empty after removing leading dots ("a,,b", a leading or

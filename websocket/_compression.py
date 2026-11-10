@@ -17,6 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from __future__ import annotations  # py3.7/3.8: builtin generics in type hints
+
 import sys
 import zlib
 from typing import Optional, Union

@@ -88,7 +88,8 @@ def handshake(
         raise WebSocketException("Invalid WebSocket Header")
 
     deflate = None
-    if compression := options["compression"]:
+    compression = options["compression"]
+    if compression:
         deflate = compression.accept(resp.get("sec-websocket-extensions"))
 
     return handshake_response(status, resp, subproto, hostname, deflate)
@@ -170,7 +171,8 @@ def _get_handshake_headers(
     else:
         headers.append(options["connection"])
 
-    if subprotocols := options.get("subprotocols"):
+    subprotocols = options.get("subprotocols")
+    if subprotocols:
         headers.append(f'Sec-WebSocket-Protocol: {",".join(subprotocols)}')
 
     if header:
@@ -178,7 +180,8 @@ def _get_handshake_headers(
             header = [": ".join([k, v]) for k, v in header.items() if v is not None]
         headers.extend(header)
 
-    if compression := _compression(options):
+    compression = _compression(options)
+    if compression:
         if any(h.lower().startswith("sec-websocket-extensions:") for h in headers):
             raise WebSocketException(
                 "Pass either the compression option or a Sec-WebSocket-Extensions header, not both"
@@ -188,7 +191,8 @@ def _get_handshake_headers(
     server_cookie = CookieJar.get(host, scheme == "wss")
     client_cookie = options.get("cookie", None)
 
-    if cookie := "; ".join(filter(None, [server_cookie, client_cookie])):
+    cookie = "; ".join(filter(None, [server_cookie, client_cookie]))
+    if cookie:
         headers.append(f"Cookie: {cookie}")
 
     headers.extend(("", ""))

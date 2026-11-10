@@ -1,3 +1,4 @@
+from __future__ import annotations  # py3.7/3.8: builtin generics in type hints
 import array
 import os
 import struct

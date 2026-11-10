@@ -57,7 +57,8 @@ class SimpleCookieJar:
             # entry, and morsels without a domain are dropped (consistent
             # with the no-domain rule above).
             for v in simple_cookie.values():
-                if domain := v.get("domain"):
+                domain = v.get("domain")
+                if domain:
                     domain = self._domain_key(domain)
                     if host is not None and not self._domain_match(host, domain):
                         debug("Ignoring Set-Cookie for another domain")
@@ -96,7 +97,8 @@ class SimpleCookieJar:
         if set_cookie:
             simple_cookie = http.cookies.SimpleCookie(set_cookie)
             for v in simple_cookie.values():
-                if domain := v.get("domain"):
+                domain = v.get("domain")
+                if domain:
                     self._forget(self._domain_key(domain))
             self.add(set_cookie)
 
